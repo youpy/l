@@ -3,12 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
-	"net"
 	"os"
-	"strconv"
 	"time"
 
 	"../.."
+	"github.com/youpy/go-line-us"
 )
 
 func checkError(err error) {
@@ -18,42 +17,19 @@ func checkError(err error) {
 	}
 }
 
-func read(conn *net.TCPConn) {
-	buf := make([]byte, 1)
-	for {
-		n, err := conn.Read(buf)
-		if n == 0 {
-			break
-		}
-		checkError(err)
-
-		if string(buf[:n]) == "\u0000" {
-			break
-		}
-
-		fmt.Print(string(buf[:n]))
-	}
-}
-
-func write(turtle *lindenmayer.Turtle, conn *net.TCPConn) {
-	var z int
+func write(turtle *lindenmayer.Turtle, client *lineus.Client) {
+	var z float64
 
 	if turtle.Pen {
-		z = 0
+		z = 0.0
 	} else {
-		z = 1000
+		z = 1000.0
 	}
 
-	_, err := conn.Write(
-		[]byte(
-			"G01" +
-				" X" + strconv.FormatFloat(turtle.Pos.X, 'f', 4, 64) +
-				" Y" + strconv.FormatFloat(turtle.Pos.Y, 'f', 4, 64) +
-				" Z" + strconv.Itoa(z) +
-				"\u0000",
-		),
-	)
+	res, err := client.LinearInterpolation(turtle.Pos.X, turtle.Pos.Y, z)
 	checkError(err)
+
+	fmt.Print(string(res.Message))
 
 	time.Sleep(200 * time.Millisecond)
 }
@@ -70,23 +46,17 @@ func main() {
 
 	flag.Parse()
 
-	tcpAddr, err := net.ResolveTCPAddr("tcp4", *hostname)
+	client, err := lineus.NewClient(*hostname)
 	checkError(err)
-
-	conn, err := net.DialTCP("tcp", nil, tcpAddr)
-	checkError(err)
-
-	read(conn)
 
 	turtle := lindenmayer.NewTurtle(*x, *y)
 	done := make(chan struct{})
 
-	write(turtle, conn)
+	write(turtle, client)
 
 	go func() {
 		for _ = range turtle.Dispatcher {
-			write(turtle, conn)
-			read(conn)
+			write(turtle, client)
 		}
 
 		close(done)
