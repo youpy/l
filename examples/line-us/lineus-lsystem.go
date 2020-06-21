@@ -6,8 +6,8 @@ import (
 	"os"
 	"time"
 
-	"../.."
-	"github.com/youpy/go-line-us"
+	lineus "github.com/youpy/go-line-us"
+	lindenmayer "github.com/youpy/l"
 )
 
 func checkError(err error) {
