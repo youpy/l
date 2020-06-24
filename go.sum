@@ -1,2 +1,4 @@
 github.com/youpy/go-line-us v0.0.0-20180513074400-dc05d290e6ab h1:ZmIq9ZwtjYLA1XF2kAaNBPOSH4i/NXznhZIIkn8yMfw=
 github.com/youpy/go-line-us v0.0.0-20180513074400-dc05d290e6ab/go.mod h1:0gxrhVuQNzNiXP/XK9jKOPKq2iizovCUb7mz18fp0lA=
+github.com/youpy/go-lineus v0.0.0-20200624022755-ab1ec6d6f92d h1:eYs4ilL+Ef5JCblUDVEQi1QtJ5rA+ft1vZKBZ3nwYqw=
+github.com/youpy/go-lineus v0.0.0-20200624022755-ab1ec6d6f92d/go.mod h1:hxvyHL62Spxy/ICopP2j0Cjcy/dHjjVYDQ40Cmw7ZqY=

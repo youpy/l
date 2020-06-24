@@ -3,10 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
+	"net"
 	"os"
 	"time"
 
-	lineus "github.com/youpy/go-line-us"
+	lineus "github.com/youpy/go-lineus"
 	lindenmayer "github.com/youpy/l"
 )
 
@@ -46,7 +47,17 @@ func main() {
 
 	flag.Parse()
 
-	client, err := lineus.NewClient(*hostname)
+	tcpAddr, err := net.ResolveTCPAddr("tcp4", *hostname)
+	if err != nil {
+		return
+	}
+
+	conn, err := net.DialTCP("tcp", nil, tcpAddr)
+	if err != nil {
+		return
+	}
+
+	client := lineus.NewClient(conn)
 	checkError(err)
 
 	turtle := lindenmayer.NewTurtle(*x, *y)
