@@ -30,7 +30,7 @@ func write(turtle *lindenmayer.Turtle, client *lineus.Client) {
 	res, err := client.LinearInterpolation(turtle.Pos.X, turtle.Pos.Y, z)
 	checkError(err)
 
-	fmt.Print(string(res.Message))
+	fmt.Print(string(res.Message()))
 
 	time.Sleep(200 * time.Millisecond)
 }
